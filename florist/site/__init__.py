@@ -1,8 +1,8 @@
 from flask import Blueprint
+from ..contrib.admin import admin_bp
+from ..contrib.cms import cms_bp
 
 site_bp = Blueprint('site', __name__)
 
-# site = app = Flask(__name__)
-@site_bp.route("/")
-def hello_world():
-    return "<p>Hello, World!</p>"
+site_bp.register_blueprint(cms_bp)
+site_bp.register_blueprint(admin_bp, url_prefix='/admin')
