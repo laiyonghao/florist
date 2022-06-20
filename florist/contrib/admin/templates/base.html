@@ -26,11 +26,19 @@
   <header>
     {% block header %}{% endblock %}
   </header>
-  {% for message in get_flashed_messages() %}
+  {% for category, message in get_flashed_messages(with_categories=true) %}
 
     <div
-        class="p-4 border rounded text-sky-700 bg-sky-50 border-sky-900/10"
-        role="alert"
+        {% if category == "success" %}
+            class="p-4 border rounded text-green-700 bg-green-50 border-green-900/10"
+        {% elif category in ["warn", "failed"] %}
+            class="p-4 border rounded text-amber-700 bg-amber-50 border-amber-900/10"
+        {% elif category in ["alert", "error"] %}
+            class="p-4 border rounded text-red-700 bg-red-50 border-red-900/10"
+        {% else %}
+            class="p-4 border rounded text-sky-700 bg-sky-50 border-sky-900/10"
+        {% endif %}
+        role="{{ category }}"
         >
         <strong class="text-sm font-medium">{{ message }}</strong>
     </div>

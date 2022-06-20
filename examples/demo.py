@@ -1,16 +1,12 @@
-from florist.site import site_bp
 
 from flask import Flask
 
 app = Flask(__name__)
 app.secret_key = "florist demo site secret key"
+app.config['MONGODB_SETTINGS'] = {'DB': 'florist-demo'}
 
-app.register_blueprint(site_bp)
+from florist.db import init as db_init
+db_init(app)
 
-
-# 借鉴 flask-admin
-from flask_admin import Admin
-# set optional bootswatch theme
-app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
-admin = Admin(app, url='/admin2', name='microblog', template_mode='bootstrap3')
-# Add administrative views here
+from florist.site import init as site_init
+site_init(app)
