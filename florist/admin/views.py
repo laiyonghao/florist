@@ -1,5 +1,7 @@
 # Create customized model view class
 from flask_admin.contrib.mongoengine import ModelView as MV
+from flask_admin import AdminIndexView as AIV
+
 from flask_security import current_user
 from flask import abort, redirect, url_for, request
 
@@ -25,4 +27,8 @@ class SecurityMixin(object):
 
 
 class ModelView(SecurityMixin, MV):
+    pass
+
+
+class AdminIndexView(SecurityMixin, AIV):
     pass
