@@ -1,6 +1,14 @@
 security = None
 def init(app):
     global security
+
+    # ensure admin
+    from .models import Role, User
+    @app.before_first_request
+    def ensure_admin():
+        admin_role = Role.ensure_admin()
+        User.ensure_admin(app.config, admin_role)
+
     app.config['SECURITY_URL_PREFIX'] = '/users'
     app.config['SECURITY_REGISTERABLE'] = True
     app.config['SECURITY_RECOVERABLE'] = True
@@ -19,5 +27,4 @@ def init(app):
         app=app,
         datastore=user_datastore,
         register_form=ExtendedRegisterForm,
-        
     )
