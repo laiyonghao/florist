@@ -1,5 +1,8 @@
+from importlib import import_module
 from flask_admin import Admin
-from .views import AdminIndexView
+from .views import AdminIndexView, ModelView
+
+admin = None
 
 def init(app, url_prefix=None, name=None, index_view=None):
     if not url_prefix:
@@ -9,8 +12,7 @@ def init(app, url_prefix=None, name=None, index_view=None):
     if not index_view:
         index_view = AdminIndexView()
 
+    global admin
     admin = Admin(app, url=url_prefix, name=name, index_view=index_view, template_mode='bootstrap4')
-
-    # 此处应改为服务发现。
-    from ..user.admin import init as user_admin_init
-    user_admin_init(admin)
+    # 加载 user.admin
+    import_module('florist.user.admin')

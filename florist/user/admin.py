@@ -1,5 +1,4 @@
-# from flask_admin.contrib.mongoengine import ModelView
-from ..admin.views import ModelView
+from ..admin import admin, ModelView
 
 from .models import User, Role
 
@@ -16,6 +15,5 @@ class UserModelView(ModelView):
     def __init__(self, *a, **kw):
         super().__init__(User, *a, **kw)
 
-def init(admin):
-    admin.add_view(UserModelView())
-    admin.add_view(ModelView(Role))
+admin.add_view(UserModelView())
+admin.add_view(ModelView(Role))
