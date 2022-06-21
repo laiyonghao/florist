@@ -2,8 +2,6 @@ from flask_admin import Admin
 from .views import AdminIndexView
 
 def init(app, url_prefix=None, name=None, index_view=None):
-    app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
-
     if not url_prefix:
         url_prefix = '/admin'
     if not name:

@@ -43,16 +43,22 @@ class User(db.Document, UserMixin):
 
     @classmethod
     def ensure_admin(cls, config, admin_role):
-        admin_username = config.get('FLORIST_ADMIN_USERNAME', 'admin')
-        admin_mobile = config.get('FLORIST_ADMIN_MOBILE', '13800123123')
-        admin_email = config.get('FLORIST_ADMIN_EMAIL', 'admin@example.com')
-        admin_password = config.get('FLORIST_ADMIN_PASSWORD', 'nimda321')
+        admin_username = config['FLORIST_ADMIN_USERNAME']
+        admin_mobile = config['FLORIST_ADMIN_MOBILE']
+        admin_email = config['FLORIST_ADMIN_EMAIL']
+        admin_password = config['FLORIST_ADMIN_PASSWORD']
         try:
-            user = cls(username=admin_username, mobile=admin_mobile, email=admin_email, password=hash_password(admin_password), roles=[admin_role])
+            user = cls(
+                username=admin_username,
+                mobile=admin_mobile,
+                email=admin_email,
+                password=hash_password(admin_password),
+                roles=[admin_role],
+            )
             user.save()
         except mongoengine.errors.MongoEngineException:
             pass
-        
+
     def __str__(self):
         return self.nickname or self.username
 
