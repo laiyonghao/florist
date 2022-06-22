@@ -1,6 +1,6 @@
-# florist
+# Florist
 
-种花人，基于flask的一个web dev实验。
+种花人，基于Flask的一个web dev实验。
 
 ## 目标
 
@@ -8,19 +8,29 @@
 
 ## 使用的库
 
-仅限项目内直接 `import` 的
+仅列出项目内直接 `import` 的
 
 * Flask
-* Mongoengine
-
 * Flask-Mongoengine
+  * Mongoengine
 * Flask-Admin
-
 * Flask-Security
 * Flask-Security-Too
-
-* WTForms
 * Flask-WTForms
+  * WTForms
+* Flask-thumbnails
+
+## 功能模块
+
+1. meterial: 素材管理
+
+1. facet: 片面模式
+
+1. event: 事件模式
+1. cms: 内容管理
+
+1. shop: 店铺功能
+1. pay: 支付功能
 
 ## 状态
 
