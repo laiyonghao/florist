@@ -29,7 +29,17 @@ class SecurityMixin(object):
 
 
 class ModelView(SecurityMixin, MV):
-    pass
+    def __init__(self, *a, **kw):
+        '''一个小技巧，实现可以使用 class attribute `model_class` 指定模型。
+        '''
+        try:
+            model = self.model_class
+        except AttributeError:
+            # 兼容原来在构建实例时指定模型的写法。
+            model = kw.pop('model', None)
+            if model is None:
+                model, *a = a
+        super().__init__(model, *a, **kw)
 
 
 class AdminIndexView(SecurityMixin, AIV):

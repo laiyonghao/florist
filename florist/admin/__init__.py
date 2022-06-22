@@ -14,6 +14,10 @@ def init(app, url_prefix=None, name=None, index_view=None):
 
     global admin
     admin = Admin(app, url=url_prefix, name=name, index_view=index_view, template_mode='bootstrap4')
+
+    for pkg in app.config['FLORIST_ADMIN_PACKAGES']:
+        import_module(f'{pkg}.admin')
+
     # 加载 user.admin
     import_module('florist.user.admin')
 

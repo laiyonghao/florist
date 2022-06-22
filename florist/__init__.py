@@ -20,3 +20,9 @@ def init(app):
     # site_bp.register_blueprint(cms_bp)
     # # 挂载到app
     # app.register_blueprint(site_bp, url_prefix='/')
+
+    # class A(object):
+    #     def __init__(self) -> None:
+    #         self.object = 'ccc'
+    # a = A()
+    # print(a.object)
