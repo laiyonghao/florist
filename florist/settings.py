@@ -1,5 +1,8 @@
+# ------ Flask-Admin ------
 FLASK_ADMIN_SWATCH = 'cerulean'
+# ------ Flask-Admin ------
 
+# ------ Flask-Security ------
 SECURITY_URL_PREFIX = '/users'
 SECURITY_REGISTERABLE = True
 SECURITY_RECOVERABLE = True
@@ -8,8 +11,11 @@ SECURITY_SEND_REGISTER_EMAIL = False
 SECURITY_SEND_PASSWORD_CHANGE_EMAIL = False
 SECURITY_SEND_PASSWORD_RESET_EMAIL = False
 SECURITY_SEND_PASSWORD_RESET_NOTICE_EMAIL = False
+# ------ Flask-Security ------
 
+# ------ Florist ------
 FLORIST_ADMIN_USERNAME = 'admin'
 FLORIST_ADMIN_MOBILE = '13000000000'
 FLORIST_ADMIN_EMAIL ='admin@example.com'
 FLORIST_ADMIN_PASSWORD = 'nimda321'
+# ------ Florist ------
