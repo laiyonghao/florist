@@ -1,6 +1,6 @@
 # Florist
 
-种花人，基于Flask的一个web dev实验。
+种花人，基于Flask的一个web dev实验，准备用来写一本关于Flask项目工程化开发的书。
 
 ## 目标
 
@@ -23,14 +23,11 @@
 ## 功能模块
 
 1. meterial: 素材管理
-
-1. facet: 片面模式
-
-1. event: 事件模式
-1. cms: 内容管理
-
-1. shop: 店铺功能
-1. pay: 支付功能
+2. facet: 片面模式
+3. event: 事件模式
+4. cms: 内容管理
+5. shop: 店铺功能
+6. pay: 支付功能
 
 ## 状态
 
