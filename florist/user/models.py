@@ -1,7 +1,7 @@
 import mongoengine.errors
 from flask_security import MongoEngineUserDatastore, UserMixin, RoleMixin
-
-from florist.contrib.admin import hash_password
+from flask_security.utils import hash_password
+# from florist.contrib.admin import hash_password
 
 from ..db import db
 
