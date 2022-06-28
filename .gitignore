@@ -131,3 +131,4 @@ dmypy.json
 .vscode/
 *.code-workspace
 dev_settings.py
+examples/static/*

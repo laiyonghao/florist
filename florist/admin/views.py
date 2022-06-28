@@ -6,13 +6,16 @@ from flask_security import current_user
 from flask import abort, redirect, url_for, request, current_app
 from ..user.models import Role
 
+def is_accessible():
+    return (
+        current_user.is_active and
+        current_user.is_authenticated and
+        current_user.has_role(Role.admin_name)
+    )
+
 class SecurityMixin(object):
     def is_accessible(self):
-        return (
-            current_user.is_active and
-            current_user.is_authenticated and
-            current_user.has_role(Role.admin_name)
-        )
+        return is_accessible()
 
     def _handle_view(self, name, **kwargs):
         """

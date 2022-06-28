@@ -8,5 +8,8 @@
     or you need to config the CKEditor textarea, use the line below to register the configuration.
     The name value should be the name of the CKEditor form field.
     #}
-    {{ ckeditor.config(name='text') }}
+    {#
+        自定义配置，选中图片后不直接填充宽高。
+    #}
+    {{ ckeditor.config(name='content', custom_config="image_prefillDimensions: false") }}
 {% endblock %}

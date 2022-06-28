@@ -1,7 +1,8 @@
 from flask_ckeditor import CKEditor, CKEditorField
 from ...admin import admin, ModelView
 from .models import Article
-from flask_admin.contrib.fileadmin import FileAdmin
+
+ckeditor = CKEditor(admin.app)
 
 class ArticleView(ModelView):
     model_class = Article

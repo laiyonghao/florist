@@ -1,6 +1,6 @@
 # Florist
 
-种花人，基于Flask的一个web dev实验，准备用来写一本关于Flask项目工程化开发的书。
+种花家，基于Flask的一个web dev实验，准备用来写一本关于Flask项目工程化开发的书。
 
 ## 目标
 
@@ -18,7 +18,9 @@
 * Flask-Security-Too
 * Flask-WTForms
   * WTForms
+* Flask-CKEditor
 * Flask-thumbnails
+* flaskfilemanager
 
 ## 功能模块
 
@@ -28,6 +30,8 @@
 4. cms: 内容管理
 5. shop: 店铺功能
 6. pay: 支付功能
+7. page: 低代码页面开发
+8. config: 配置
 
 ## 状态
 
