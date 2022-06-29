@@ -12,4 +12,61 @@
         自定义配置，选中图片后不直接填充宽高。
     #}
     {{ ckeditor.config(name='content', custom_config="image_prefillDimensions: false") }}
+    <style type="text/css">
+        .fm-modal {
+            z-index: 10011; /** Because CKEditor image dialog was at 10010 */
+            width:80%;
+            height:80%;
+            top: 10%;
+            left:10%;
+            border:0;
+            position:fixed;
+            -moz-box-shadow: 0px 1px 5px 0px #656565;
+            -webkit-box-shadow: 0px 1px 5px 0px #656565;
+            -o-box-shadow: 0px 1px 5px 0px #656565;
+            box-shadow: 0px 1px 5px 0px #656565;
+            filter:progid:DXImageTransform.Microsoft.Shadow(color=#656565, Direction=180, Strength=5);
+        }
+    </style>
+    <script>
+        CKEDITOR.on('dialogDefinition', function (event)
+        {
+            var editor = event.editor;
+            var dialogDefinition = event.data.definition;
+            var dialogName = event.data.name;
+
+            var cleanUpFuncRef = CKEDITOR.tools.addFunction(function ()
+            {
+                // Do the clean-up of filemanager here (called when an image was selected or cancel was clicked)
+                $('#fm-iframe').remove();
+                $("body").css("overflow-y", "scroll");
+            });
+
+            var tabCount = dialogDefinition.contents.length;
+            for (var i = 0; i < tabCount; i++) {
+                var dialogTab = dialogDefinition.contents[i];
+                if (!(dialogTab && typeof dialogTab.get === 'function')) {
+                    continue;
+                }
+
+                var browseButton = dialogTab.get('browse');
+                if (browseButton !== null) {
+                    browseButton.hidden = false;
+                    browseButton.onClick = function (dialog, i) {
+                        editor._.filebrowserSe = this;
+                        var iframe = $("<iframe id='fm-iframe' class='fm-modal'/>").attr({
+                            src: '{{ url_for("flaskfilemanager.index") }}' + // Change it to wherever  Filemanager is stored.
+                            '?CKEditorFuncNum=' + CKEDITOR.instances[event.editor.name]._.filebrowserFn +
+                            '&CKEditorCleanUpFuncNum=' + cleanUpFuncRef +
+                            '&langCode=en' +
+                            '&CKEditor=' + event.editor.name
+                        });
+
+                        $("body").append(iframe);
+                        $("body").css("overflow-y", "hidden");  // Get rid of possible scrollbars in containing document
+                    }
+                }
+            }
+        });
+    </script>
 {% endblock %}

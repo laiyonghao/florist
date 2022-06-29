@@ -7,6 +7,7 @@ from flask_ckeditor import upload_fail, upload_success
 from ...admin import admin
 from ...admin.views import is_accessible
 
+static_folder = pathlib.Path(__file__).parent / 'static'
 template_folder = pathlib.Path(__file__).parent / 'templates'
 meterial_bp = Blueprint('meterialadmin', __name__, template_folder=template_folder)
 
@@ -49,6 +50,12 @@ class FileAdmin(OrigFileAdmin):
 
 
 admin.add_view(FileAdmin('static/', '/static/', name='Static Files'))
-flaskfilemanager_init(admin.app, access_control_function=is_accessible)
+# 通过自定义回调实现相对路径。
+# REF: https://github.com/psolom/RichFilemanager/issues/222
+flaskfilemanager_init(
+    admin.app,
+    access_control_function=is_accessible,
+    custom_init_js_path=static_folder / 'filemanager.init.js'
+)
 # https://github.com/psolom/RichFilemanager/wiki/How-to-open-the-Filemanager-from-CKEditor-in-a-modal-window
 admin.app.register_blueprint(meterial_bp, url_prefix=f'{admin.url}/meterial')
