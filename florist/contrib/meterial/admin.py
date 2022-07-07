@@ -49,7 +49,7 @@ class FileAdmin(OrigFileAdmin):
             self.on_file_upload(directory, path, filename)
 
 
-admin.add_view(FileAdmin('uploaded/', '/uploaded/', name='Uploaded Files'))
+admin.add_view(FileAdmin(admin.app.config['UPLOADED_PATH'], '/uploaded/', name='Uploaded Files'))
 # 通过自定义回调实现相对路径。
 # REF: https://github.com/psolom/RichFilemanager/issues/222
 flaskfilemanager_init(
