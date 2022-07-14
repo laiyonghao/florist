@@ -1,7 +1,6 @@
 import mongoengine.errors
 from flask_security import MongoEngineUserDatastore, UserMixin, RoleMixin
 from flask_security.utils import hash_password
-# from florist.contrib.admin import hash_password
 
 from ..db import db
 
@@ -15,18 +14,9 @@ class Role(db.Document, RoleMixin):
     def __str__(self):
         return self.name
 
-    @classmethod
-    def ensure_admin(cls):
-        try:
-            return cls.objects.get(name=cls.admin_name)
-        except mongoengine.errors.DoesNotExist:
-            role = cls(name=cls.admin_name, description='超管')
-            role.save()
-            return role
-
     def delete(self, signal_kwargs=None, **write_concern):
         if self.name == self.admin_name:
-            raise RuntimeError("Can't delete `admin` role.")
+            raise RuntimeError(f"Can't delete `{self.admin_name}` role.")
         return super().delete(signal_kwargs, **write_concern)
 
 class User(db.Document, UserMixin):
@@ -40,24 +30,6 @@ class User(db.Document, UserMixin):
     fs_uniquifier = db.StringField(max_length=64, unique=True)
     confirmed_at = db.DateTimeField()
     roles = db.ListField(db.ReferenceField(Role), default=[])
-
-    @classmethod
-    def ensure_admin(cls, config, admin_role):
-        admin_username = config['FLORIST_ADMIN_USERNAME']
-        admin_mobile = config['FLORIST_ADMIN_MOBILE']
-        admin_email = config['FLORIST_ADMIN_EMAIL']
-        admin_password = config['FLORIST_ADMIN_PASSWORD']
-        try:
-            user = cls(
-                username=admin_username,
-                mobile=admin_mobile,
-                email=admin_email,
-                password=hash_password(admin_password),
-                roles=[admin_role],
-            )
-            user.save()
-        except mongoengine.errors.MongoEngineException:
-            pass
 
     def __str__(self):
         return self.nickname or self.username

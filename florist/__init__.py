@@ -2,7 +2,7 @@
 
 # site_bp = Blueprint('site', __name__)
 
-def init(app):
+def init(app, *a, **kw):
     # 初始化数据库
     from .db import init as db_init
     db_init(app)
@@ -14,7 +14,7 @@ def init(app):
     # site_bp.register_blueprint(admin_bp, url_prefix='/admin')
     # 初始化管理后台
     from .admin import init as admin_init
-    admin_init(app, url_prefix='/admin')
+    admin_init(app, *a, **kw)
     # 初始化前台
     # from ..cms import cms_bp
     # site_bp.register_blueprint(cms_bp)
