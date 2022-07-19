@@ -14,7 +14,6 @@
 * Flask-Mongoengine
   * Mongoengine
 * Flask-Admin
-* Flask-Security
 * Flask-Security-Too
 * Flask-WTForms
   * WTForms
