@@ -22,12 +22,13 @@ class Role(db.Document, RoleMixin):
 class User(db.Document, UserMixin):
     username = db.StringField(max_length=255, unique=True)
     nickname = db.StringField(max_length=255)
-    mobile = db.StringField(max_length=255, unique=True)
+    us_phone_number = db.StringField(max_length=255, unique=True)
     email = db.StringField(max_length=255, unique=True)
     password = db.StringField(max_length=255)
     active = db.BooleanField(default=True)
     # is_staff = db.BooleanField(default=False)
     fs_uniquifier = db.StringField(max_length=64, unique=True)
+    us_totp_secrets = db.StringField()
     confirmed_at = db.DateTimeField()
     roles = db.ListField(db.ReferenceField(Role), default=[])
 

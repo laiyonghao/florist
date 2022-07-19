@@ -8,6 +8,9 @@ MONGODB_SETTINGS = {'DB': 'florist-demo'}
 
 # ------ Flask-Security ------
 SECURITY_PASSWORD_SALT = 'a58063c79d92865d79'
+SECURITY_TOTP_SECRETS = {
+    "1": "BSBMWGvOMbOrLwe6PzMkUYR8cXDdBCm7LOLezsnKbYv"
+}
 # ------ Flask-Security ------
 
 # ------ Flask-thumbnails ------

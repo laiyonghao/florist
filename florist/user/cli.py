@@ -1,5 +1,7 @@
 import click
 import logging
+import json
+from passlib import totp
 from uuid import uuid4
 from mongoengine import errors
 from flask_security.utils import hash_password
@@ -17,11 +19,12 @@ def createsuperuser(name, password, mobile, email):
     try:
         user_datastore.create_user(
             username=name,
-            mobile=mobile,
+            us_phone_number=mobile,
             email=email,
             password=hash_password(password),
             roles=[admin_role],
             fs_uniquifier=uuid4().hex + uuid4().hex,  # 64 字符。
+            us_totp_secrets=json.dumps({'1': totp.generate_secret(),})
         )
     except errors.MongoEngineException:
         logging.exception('创建超级用户失败。')
