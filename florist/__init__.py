@@ -1,4 +1,13 @@
+from functools import cache
+
+
+cache = None
+
 def init(app, *a, **kw):
+    global cache
+    # 初始化缓存
+    from flask_caching import Cache
+    cache = Cache(app)
     # 初始化数据库
     from .db import init as db_init
     db_init(app)
