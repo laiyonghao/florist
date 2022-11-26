@@ -35,6 +35,12 @@ def uploaded_files(filename):
 
 class FileAdmin(OrigFileAdmin):
     # modal 功能有 bug，在抛异常时会跳转到单独的新页面，所以不使用。
+    default_sort_column = 'date'
+    """The default sort column."""
+
+    default_desc = True
+    """The default desc value."""
+
     
     def _save_form_files(self, directory, path, form):
         fn =  f'{hash_filename(form.upload.data.filename)}.{form.upload.data.filename.rsplit(".")[-1]}'
