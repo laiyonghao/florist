@@ -1,7 +1,7 @@
 from functools import cache
 
-
 cache = None
+
 
 def init(app, *a, **kw):
     global cache
