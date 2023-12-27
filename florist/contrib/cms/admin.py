@@ -4,6 +4,7 @@ from .models import Article
 
 ckeditor = CKEditor(admin.app)
 
+
 class ArticleView(ModelView):
     model_class = Article
 
@@ -13,5 +14,6 @@ class ArticleView(ModelView):
 
     create_template = 'admin/create.html'
     edit_template = 'admin/edit.html'
+
 
 admin.add_view(ArticleView())

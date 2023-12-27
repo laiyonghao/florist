@@ -2,6 +2,7 @@ from ..admin import admin, ModelView
 
 from .models import User, Role
 
+
 class UserModelView(ModelView):
     model_class = User
 

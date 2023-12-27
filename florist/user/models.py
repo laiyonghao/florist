@@ -4,6 +4,7 @@ from flask_security.utils import hash_password
 
 from ..db import db
 
+
 class Role(db.Document, RoleMixin):
     admin_name = 'admin'
 
@@ -18,6 +19,7 @@ class Role(db.Document, RoleMixin):
         if self.name == self.admin_name:
             raise RuntimeError(f"Can't delete `{self.admin_name}` role.")
         return super().delete(signal_kwargs, **write_concern)
+
 
 class User(db.Document, UserMixin):
     username = db.StringField(max_length=255, unique=True)
@@ -38,4 +40,3 @@ class User(db.Document, UserMixin):
 
 # Setup Flask-Security
 user_datastore = MongoEngineUserDatastore(db, User, Role)
-

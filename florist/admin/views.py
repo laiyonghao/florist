@@ -6,14 +6,14 @@ from flask_security import current_user
 from flask import abort, redirect, url_for, request, current_app
 from ..user.models import Role
 
+
 def is_accessible():
-    return (
-        current_user.is_active and
-        current_user.is_authenticated and
-        current_user.has_role(Role.admin_name)
-    )
+    return (current_user.is_active and current_user.is_authenticated
+            and current_user.has_role(Role.admin_name))
+
 
 class SecurityMixin(object):
+
     def is_accessible(self):
         return is_accessible()
 
@@ -32,6 +32,7 @@ class SecurityMixin(object):
 
 
 class ModelView(SecurityMixin, MV):
+
     def __init__(self, *a, **kw):
         '''一个小技巧，实现可以使用 class attribute `model_class` 指定模型。
         '''

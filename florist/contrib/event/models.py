@@ -4,6 +4,7 @@ from mongoengine import fields
 from ...db import db
 from ...user.models import User
 
+
 class EventLog(db.Document):
     occurred_at = fields.DateTimeField(required=True)
     subject = fields.ReferenceField(User, required=True)
