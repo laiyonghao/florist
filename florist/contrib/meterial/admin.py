@@ -68,5 +68,6 @@ admin.add_view(
 flaskfilemanager_init(admin.app,
                       access_control_function=is_accessible,
                       custom_init_js_path=static_folder / 'filemanager.init.js')
+
 # https://github.com/psolom/RichFilemanager/wiki/How-to-open-the-Filemanager-from-CKEditor-in-a-modal-window
 admin.app.register_blueprint(meterial_bp, url_prefix=f'{admin.url}/meterial')

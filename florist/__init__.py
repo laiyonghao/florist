@@ -1,6 +1,6 @@
 from functools import cache
 
-cache = None
+cache = None  # noqa
 
 
 def init(app, *a, **kw):
