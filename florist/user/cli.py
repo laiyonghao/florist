@@ -3,8 +3,10 @@ import logging
 from uuid import uuid4
 from mongoengine import errors
 from flask_security.utils import hash_password
+from flask_security.cli import users
 
 
+@users.command('createsuperuser')
 @click.argument('name')
 @click.password_option()
 @click.argument('mobile')
@@ -27,5 +29,12 @@ def createsuperuser(name, password, mobile, email):
         logging.exception('创建超级用户失败。')
 
 
-def init(app):
-    app.cli.command()(createsuperuser)
+@users.command(
+    'all',
+    short_help=("List all users."),
+)
+def all():
+    from .models import user_datastore
+    users = user_datastore.user_model.objects.all()
+    for u in users:
+        print(u.username or u.email)

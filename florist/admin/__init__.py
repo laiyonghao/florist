@@ -19,9 +19,10 @@ def init(app, url=None, name=None, index_view=None):
     admin = Admin(
         app, name=name, index_view=index_view, template_mode='bootstrap4')
 
-    from flask_admin.contrib import rediscli
-    from redis import Redis
-    admin.add_view(rediscli.RedisCli(Redis()))
+    if app.config.get('FLORIST_REDISCLI_ENBLED'):
+        from flask_admin.contrib import rediscli
+        from redis import Redis
+        admin.add_view(rediscli.RedisCli(Redis()))
 
     for pkg in app.config['FLORIST_ADMIN_PACKAGES']:
         import_module(f'{pkg}.admin')
