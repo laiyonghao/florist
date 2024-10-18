@@ -12,6 +12,7 @@ def is_accessible():
             and current_user.has_role(Role.admin_name))
 
 
+
 class SecurityMixin(object):
 
     def is_accessible(self):

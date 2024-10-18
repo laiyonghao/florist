@@ -1,4 +1,3 @@
-from email.policy import default
 from mongoengine import fields
 from datetime import datetime
 from enum import Enum

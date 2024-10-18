@@ -1,8 +1,18 @@
+import pathlib
 from importlib import import_module
+from flask import Blueprint
 from flask_admin import Admin
 from .views import AdminIndexView, ModelView # noqa
 
 admin = None
+
+static_folder = pathlib.Path(__file__).parent / 'static'
+florist_bp = Blueprint('florist_bp', __name__, static_folder=static_folder)
+
+
+@florist_bp.route('/static/js/image_input_widget.js')
+def image_input_widget_js():
+    return florist_bp.send_static_file('js/image_input_widget.js')
 
 
 def init(app, url=None, name=None, index_view=None):
@@ -23,6 +33,8 @@ def init(app, url=None, name=None, index_view=None):
         from flask_admin.contrib import rediscli
         from redis import Redis
         admin.add_view(rediscli.RedisCli(Redis()))
+
+    app.register_blueprint(florist_bp, url_prefix=f'{admin.url}/florist')
 
     for pkg in app.config['FLORIST_ADMIN_PACKAGES']:
         import_module(f'{pkg}.admin')
