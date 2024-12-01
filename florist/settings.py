@@ -4,6 +4,8 @@ from flask_security import (
     uia_username_mapper,
 )
 
+SEND_FILE_MAX_AGE_DEFAULT = 60*60*24
+
 # ------ Flask-Admin ------
 FLASK_ADMIN_SWATCH = 'cerulean'
 # ------ Flask-Admin ------

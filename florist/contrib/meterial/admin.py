@@ -7,6 +7,8 @@ from flask_ckeditor import upload_fail, upload_success
 from ...admin import admin
 from ...admin.views import is_accessible
 
+from ... import limiter
+
 static_folder = pathlib.Path(__file__).parent / 'static'
 template_folder = pathlib.Path(__file__).parent / 'templates'
 meterial_bp = Blueprint('meterialadmin',
@@ -31,7 +33,20 @@ def ckeditor_upload():
     return upload_success(url=url)
 
 
+from flask_limiter.util import get_remote_address
+def files_key_func():
+    t = f'{get_remote_address()}{request.path}'
+    # print('*'*10, t)
+    return t
+
+
 @admin.app.route('/meterial/<path:filename>')
+# 一个IP获取同一个文件，最多1次/分钟，10次/天
+@limiter.limit(
+    '1/minute;10/day',
+    key_func=files_key_func,
+    error_message="别搞我，有事可联系：mail@laiyonghao.com",
+)
 def uploaded_files(filename):
     path = admin.app.config['UPLOADED_PATH']
     return send_from_directory(path, filename)
