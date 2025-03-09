@@ -4,6 +4,7 @@ from flask_admin.babel import gettext, lazy_gettext
 from flaskfilemanager import init as flaskfilemanager_init
 from flask_admin.contrib.fileadmin import FileAdmin as OrigFileAdmin
 from flask_ckeditor import upload_fail, upload_success
+from flask_limiter.util import get_remote_address
 from ...admin import admin
 from ...admin.views import is_accessible
 
@@ -33,7 +34,6 @@ def ckeditor_upload():
     return upload_success(url=url)
 
 
-from flask_limiter.util import get_remote_address
 def files_key_func():
     t = f'{get_remote_address()}{request.path}'
     # print('*'*10, t)
