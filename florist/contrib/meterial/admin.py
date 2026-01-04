@@ -43,13 +43,16 @@ def files_key_func():
 @admin.app.route('/meterial/<path:filename>')
 # 一个IP获取同一个文件，最多1次/分钟，10次/天
 @limiter.limit(
-    '1/minute;10/day',
+    '4/minute;40/day',
     key_func=files_key_func,
     error_message="别搞我，有事可联系：mail@laiyonghao.com",
 )
 def uploaded_files(filename):
     path = admin.app.config['UPLOADED_PATH']
-    return send_from_directory(path, filename)
+    response = send_from_directory(path, filename)
+    # 强缓存：1年有效期，public，immutable
+    response.headers['Cache-Control'] = 'public, max-age=31536000, immutable'
+    return response
 
 
 class FileAdmin(OrigFileAdmin):
