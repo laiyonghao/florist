@@ -92,15 +92,24 @@ _SCRIPT_TEMPLATE = '''
                 'max-height: 100%; width: auto; height: auto; ' +
                 'display: block; margin: auto;" />' +
                 '        </div>' +
-                '        <div class="d-flex justify-content-center mt-3">' +
+                '        <div class="d-flex flex-column ' +
+                'align-items-center mt-3">' +
                 '          <div class="btn-group" role="group">' +
+                '            <button type="button" ' +
+                'class="btn btn-secondary btn-sm" ' +
+                'id="florist_imageinput_modal_first">First</button>' +
                 '            <button type="button" ' +
                 'class="btn btn-secondary btn-sm" ' +
                 'id="florist_imageinput_modal_prev">Prev</button>' +
                 '            <button type="button" ' +
                 'class="btn btn-secondary btn-sm" ' +
                 'id="florist_imageinput_modal_next">Next</button>' +
+                '            <button type="button" ' +
+                'class="btn btn-secondary btn-sm" ' +
+                'id="florist_imageinput_modal_last">Last</button>' +
                 '          </div>' +
+                '          <div id="florist_imageinput_modal_counter" ' +
+                'class="small text-muted mt-2"></div>' +
                 '        </div>' +
                 '      </div>' +
                 '    </div>' +
@@ -110,12 +119,26 @@ _SCRIPT_TEMPLATE = '''
             document.body.appendChild(wrapper.firstElementChild);
 
             // Bind handlers once after modal is inserted.
+            var firstBtn = document.getElementById(
+                'florist_imageinput_modal_first'
+            );
             var prevBtn = document.getElementById(
                 'florist_imageinput_modal_prev'
             );
             var nextBtn = document.getElementById(
                 'florist_imageinput_modal_next'
             );
+            var lastBtn = document.getElementById(
+                'florist_imageinput_modal_last'
+            );
+
+            if (firstBtn) {
+                firstBtn.addEventListener('click', function () {
+                    if (window.FloristImageInputWidget) {
+                        window.FloristImageInputWidget.first();
+                    }
+                });
+            }
             if (prevBtn) {
                 prevBtn.addEventListener('click', function () {
                     if (window.FloristImageInputWidget) {
@@ -127,6 +150,13 @@ _SCRIPT_TEMPLATE = '''
                 nextBtn.addEventListener('click', function () {
                     if (window.FloristImageInputWidget) {
                         window.FloristImageInputWidget.next();
+                    }
+                });
+            }
+            if (lastBtn) {
+                lastBtn.addEventListener('click', function () {
+                    if (window.FloristImageInputWidget) {
+                        window.FloristImageInputWidget.last();
                     }
                 });
             }
@@ -180,19 +210,43 @@ _SCRIPT_TEMPLATE = '''
         }
 
         function setNavButtonState(currentIndex, total) {
+            var firstBtn = document.getElementById(
+                'florist_imageinput_modal_first'
+            );
             var prevBtn = document.getElementById(
                 'florist_imageinput_modal_prev'
             );
             var nextBtn = document.getElementById(
                 'florist_imageinput_modal_next'
             );
+            var lastBtn = document.getElementById(
+                'florist_imageinput_modal_last'
+            );
+            var counter = document.getElementById(
+                'florist_imageinput_modal_counter'
+            );
 
             var hasMany = total > 1;
+            if (firstBtn) {
+                firstBtn.disabled = !hasMany || currentIndex <= 0;
+            }
             if (prevBtn) {
                 prevBtn.disabled = !hasMany || currentIndex <= 0;
             }
             if (nextBtn) {
                 nextBtn.disabled = !hasMany || currentIndex >= total - 1;
+            }
+            if (lastBtn) {
+                lastBtn.disabled = !hasMany || currentIndex >= total - 1;
+            }
+
+            if (counter) {
+                if (total > 0 && currentIndex >= 0) {
+                    counter.textContent =
+                        String(currentIndex + 1) + ' / ' + String(total);
+                } else {
+                    counter.textContent = '';
+                }
             }
         }
 
@@ -286,6 +340,16 @@ _SCRIPT_TEMPLATE = '''
                     return;
                 }
                 openAtIndex(_index + 1);
+            },
+
+            first: function () {
+                if (!_items || !_items.length) return;
+                openAtIndex(0);
+            },
+
+            last: function () {
+                if (!_items || !_items.length) return;
+                openAtIndex(_items.length - 1);
             },
         };
     })();
