@@ -3,6 +3,7 @@ from importlib import import_module
 from flask import Blueprint
 from flask_admin import Admin
 from .views import AdminIndexView, ModelView # noqa
+from .form.fields import ImageInputWidgetExtraJs  # noqa
 
 admin = None
 
