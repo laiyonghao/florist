@@ -13,4 +13,4 @@ class EventLogModelView(ModelView):
     column_filters = ['predicate', 'subject', 'occurred_at']
 
 
-admin.add_view(EventLogModelView())
+admin.add_view(EventLogModelView(category='日志'))

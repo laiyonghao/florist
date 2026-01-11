@@ -80,7 +80,8 @@ class FileAdmin(OrigFileAdmin):
 admin.add_view(
     FileAdmin(admin.app.config['UPLOADED_PATH'],
               '/meterial/',
-              name='Uploaded Files'))
+              name='Uploaded Files',
+              category='系统'))
 # 通过自定义回调实现相对路径。
 # REF: https://github.com/psolom/RichFilemanager/issues/222
 flaskfilemanager_init(admin.app,

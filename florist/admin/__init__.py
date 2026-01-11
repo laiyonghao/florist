@@ -32,7 +32,7 @@ def init(app, url=None, name=None, index_view=None):
     if app.config.get('FLORIST_REDISCLI_ENBLED'):
         from flask_admin.contrib import rediscli
         from redis import Redis
-        admin.add_view(rediscli.RedisCli(Redis()))
+        admin.add_view(rediscli.RedisCli(Redis(), category='系统'))
 
     app.register_blueprint(florist_bp, url_prefix=f'{admin.url}/florist')
 

@@ -16,5 +16,5 @@ class UserModelView(ModelView):
     form_excluded_columns = ['password', 'fs_uniquifier', 'confirmed_at']
 
 
-admin.add_view(UserModelView())
-admin.add_view(ModelView(Role))
+admin.add_view(UserModelView(category='用户'))
+admin.add_view(ModelView(Role, category='用户'))
