@@ -70,8 +70,8 @@ def transform_image(
     quality: Optional[int],
 ) -> None:
     cfg = _current_app().config
-    max_scale_up = float(cfg.get("THUMBS_MAX_SCALE_UP", 2.0))
-    max_dim = int(cfg.get("THUMBS_MAX_DIMENSION", 8192))
+    max_scale_up = float(cfg.get("FLORIST_THUMBS_MAX_SCALE_UP", 2.0))
+    max_dim = int(cfg.get("FLORIST_THUMBS_MAX_DIMENSION", 8192))
 
     with Image.open(src_path) as img:
         img = ImageOps.exif_transpose(img)

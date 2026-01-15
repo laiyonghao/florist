@@ -68,7 +68,7 @@ FLORIST_ADMIN_PACKAGES = (
 
 - `FLORIST_ADMIN_PACKAGES`：启用哪些 contrib 模块的 admin 扩展
 - `FLORIST_ADMIN_URL` / `FLORIST_ADMIN_SITE_NAME`：管理后台基本信息
-- `THUMBS_*`：缩略图模块配置（详见 thumbs 文档）
+- `FLORIST_THUMBS_*`：缩略图模块配置（详见 thumbs 文档）
 
 ---
 

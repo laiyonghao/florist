@@ -43,3 +43,31 @@ FLORIST_ADMIN_SITE_NAME = 'Florist Admin'
 FLORIST_ADMIN_PACKAGES = ()
 FLORIST_REDISCLI_ENBLED = False
 # ------ Florist ------
+
+# ------ Florist Thumbs (Jinja filter: thumb) ------
+# Enable/disable thumbs feature globally.
+FLORIST_THUMBS_ENABLED = True
+
+# URL prefix for serving generated thumbs via Flask (dev-friendly).
+# In production you can serve FLORIST_THUMBS_CACHE_DIR via nginx/CDN
+# and keep this route.
+FLORIST_THUMBS_URL_PREFIX = '/thumbs'
+
+# Where to store generated thumbs.
+# If not set, defaults to UPLOADED_PATH / FLORIST_THUMBS_CACHE_SUBDIR.
+FLORIST_THUMBS_CACHE_DIR = None
+FLORIST_THUMBS_CACHE_SUBDIR = '_thumbs'
+
+# Only allow explicitly whitelisted output formats.
+FLORIST_THUMBS_ALLOWED_FORMATS = ('jpg', 'png', 'webp')
+
+# Defaults and safety limits.
+FLORIST_THUMBS_DEFAULT_QUALITY = 70
+FLORIST_THUMBS_MAX_SCALE_UP = 2.0
+FLORIST_THUMBS_MAX_DIMENSION = 8192
+
+# Mapping: URL prefix -> filesystem subdir
+# (relative to UPLOADED_PATH) or absolute dir.
+# Example: {"/wx/avatars/": "avatars", "/meterial/": ""}
+FLORIST_THUMBS_SOURCE_PREFIXES = {}
+# ------ Florist Thumbs ------

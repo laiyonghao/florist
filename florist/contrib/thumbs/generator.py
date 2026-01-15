@@ -30,16 +30,16 @@ def _get_uploaded_path() -> pathlib.Path:
 
 
 def _get_cache_dir() -> pathlib.Path:
-    cache_dir = current_app.config.get("THUMBS_CACHE_DIR")
+    cache_dir = current_app.config.get("FLORIST_THUMBS_CACHE_DIR")
     if cache_dir:
         return pathlib.Path(cache_dir)
 
-    subdir = current_app.config.get("THUMBS_CACHE_SUBDIR", "_thumbs")
+    subdir = current_app.config.get("FLORIST_THUMBS_CACHE_SUBDIR", "_thumbs")
     return _get_uploaded_path() / subdir
 
 
 def _allowed_formats() -> Tuple[str, ...]:
-    allowed = current_app.config.get("THUMBS_ALLOWED_FORMATS")
+    allowed = current_app.config.get("FLORIST_THUMBS_ALLOWED_FORMATS")
     if not allowed:
         return ("jpg", "png", "webp")
     return tuple([str(x).lower().strip(".") for x in allowed])
@@ -50,7 +50,7 @@ def _resolve_source(url: str) -> Optional[ResolvedSource]:
     url_path = parsed.path or ""
 
     prefixes: Dict[str, str] = (
-        current_app.config.get("THUMBS_SOURCE_PREFIXES") or {}
+        current_app.config.get("FLORIST_THUMBS_SOURCE_PREFIXES") or {}
     )
     if not prefixes:
         return None
@@ -116,7 +116,7 @@ def _build_output_path(
 
 
 def ensure_thumb(src_url: str, raw_spec: str) -> Optional[str]:
-    if not current_app.config.get("THUMBS_ENABLED", True):
+    if not current_app.config.get("FLORIST_THUMBS_ENABLED", True):
         return None
 
     resolved = _resolve_source(src_url)
@@ -144,7 +144,9 @@ def ensure_thumb(src_url: str, raw_spec: str) -> Optional[str]:
     if out_fmt not in allowed:
         return None
 
-    quality_default = int(current_app.config.get("THUMBS_DEFAULT_QUALITY", 70))
+    quality_default = int(
+        current_app.config.get("FLORIST_THUMBS_DEFAULT_QUALITY", 70)
+    )
     quality = spec.quality
     if quality is None and out_fmt in ("jpg", "webp"):
         quality = quality_default
@@ -157,7 +159,7 @@ def ensure_thumb(src_url: str, raw_spec: str) -> Optional[str]:
 
     out_path, rel = _build_output_path(cache_dir, cache_key, out_fmt)
     url_prefix = str(
-        current_app.config.get("THUMBS_URL_PREFIX", "/thumbs")
+        current_app.config.get("FLORIST_THUMBS_URL_PREFIX", "/thumbs")
     ).rstrip("/")
 
     if out_path.exists():

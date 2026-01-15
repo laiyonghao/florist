@@ -91,7 +91,7 @@ CKEDITOR_FILE_UPLOADER = 'meterialadmin.ckeditor_upload'
 要让 thumbs 能处理 meterial 的 URL，需要配置：
 
 ```python
-THUMBS_SOURCE_PREFIXES = {
+FLORIST_THUMBS_SOURCE_PREFIXES = {
     '/meterial/': '',
 }
 
@@ -109,7 +109,7 @@ THUMBS_SOURCE_PREFIXES = {
 - `UPLOADED_PATH`：必需（保存上传文件，也用于 send_from_directory）
 - `FLORIST_ADMIN_PACKAGES`：启用 admin view 与相关路由
 - `CKEDITOR_FILE_BROWSER` / `CKEDITOR_FILE_UPLOADER`：CKEditor 集成
-- `THUMBS_SOURCE_PREFIXES`：若希望缩略图支持 `/meterial/...` 源图
+- `FLORIST_THUMBS_SOURCE_PREFIXES`：若希望缩略图支持 `/meterial/...` 源图
 
 ---
 

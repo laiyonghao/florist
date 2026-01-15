@@ -16,7 +16,7 @@
 ## 快速启用（TL;DR）
 
 1. 配置 `UPLOADED_PATH`
-2. 配置 `THUMBS_SOURCE_PREFIXES`（URL 前缀白名单 → 本地目录映射）
+2. 配置 `FLORIST_THUMBS_SOURCE_PREFIXES`（URL 前缀白名单 → 本地目录映射）
 3. 模板中使用：`{{ url|thumb('w72h72cc-q70jpg') }}`
 
 ## 架构概览（实现与数据流）
@@ -25,11 +25,11 @@
 
 - `florist.contrib.thumbs.filter`：注册 Jinja filter `thumb`
 - `florist.contrib.thumbs.generator.ensure_thumb()`：
-  - URL → 本地文件路径解析（基于 `THUMBS_SOURCE_PREFIXES`）
+  - URL → 本地文件路径解析（基于 `FLORIST_THUMBS_SOURCE_PREFIXES`）
   - 解析/规范化 DSL spec（`spec.py`）
   - 生成缓存 key（包含源文件指纹 + spec + 格式 + 质量）
   - 如缓存不存在：调用 `transform.py` 用 Pillow 生成文件
-  - 返回缩略图 URL（`THUMBS_URL_PREFIX/<hash-path>.<ext>`）
+  - 返回缩略图 URL（`FLORIST_THUMBS_URL_PREFIX/<hash-path>.<ext>`）
 - `florist.contrib.thumbs.blueprint`：提供 `/thumbs/<path>` 路由读取落盘文件，并设置强缓存 Header
 
 数据流（最常见：模板渲染时生成 URL）：
@@ -38,7 +38,7 @@
 2. `thumb` → `ensure_thumb(src_url, spec)`
 3. `ensure_thumb`：
    - 只对能映射到本地文件的 URL 生效（白名单前缀）
-   - 落盘到 `THUMBS_CACHE_DIR` 或 `UPLOADED_PATH/_thumbs`
+  - 落盘到 `FLORIST_THUMBS_CACHE_DIR` 或 `UPLOADED_PATH/_thumbs`
 4. 返回 `'/thumbs/xx/yy/<sha>.jpg'` 给模板
 5. 浏览器请求 `/thumbs/...`：由 Flask blueprint（开发场景）或 nginx/CDN（生产推荐）直接提供静态文件
 
@@ -60,18 +60,18 @@ from florist.contrib.thumbs import init as thumbs_init
 thumbs_init(app)
 ```
 
-### 2）必备配置：`UPLOADED_PATH` 与 `THUMBS_SOURCE_PREFIXES`
+### 2）必备配置：`UPLOADED_PATH` 与 `FLORIST_THUMBS_SOURCE_PREFIXES`
 
 thumbs 只处理“能从 URL 映射回本地文件”的场景。
 
 - `UPLOADED_PATH`：上传文件根目录（工程里通常已经有）
-- `THUMBS_SOURCE_PREFIXES`：**URL 前缀 → 文件系统子目录** 映射白名单
+- `FLORIST_THUMBS_SOURCE_PREFIXES`：**URL 前缀 → 文件系统子目录** 映射白名单
 
 示例（xhh）：
 
 ```python
 # sites/xhh/settings.py
-THUMBS_SOURCE_PREFIXES = {
+FLORIST_THUMBS_SOURCE_PREFIXES = {
     "/wx/avatars/": "avatars",  # /wx/avatars/<fn> -> UPLOADED_PATH/avatars/<fn>
     "/meterial/": "",           # /meterial/<path>  -> UPLOADED_PATH/<path>
 }
@@ -156,7 +156,7 @@ spec 分两段：
 默认规则：
 
 - 若 spec 不指定 fmt：优先使用源文件扩展名（再不行默认 `jpg`）
-- 若 spec 不指定 q：当输出为 `jpg/webp` 时使用 `THUMBS_DEFAULT_QUALITY`（默认 70）
+- 若 spec 不指定 q：当输出为 `jpg/webp` 时使用 `FLORIST_THUMBS_DEFAULT_QUALITY`（默认 70）
 
 最终组合示例：
 
@@ -170,15 +170,15 @@ spec 分两段：
 
 Florist 在 `florist/settings.py` 里提供了默认配置：
 
-- `THUMBS_ENABLED`：默认 `True`
-- `THUMBS_URL_PREFIX`：默认 `/thumbs`
-- `THUMBS_CACHE_DIR`：默认 `None`（走 `UPLOADED_PATH / THUMBS_CACHE_SUBDIR`）
-- `THUMBS_CACHE_SUBDIR`：默认 `_thumbs`
-- `THUMBS_ALLOWED_FORMATS`：默认 `('jpg','png','webp')`
-- `THUMBS_DEFAULT_QUALITY`：默认 `70`
-- `THUMBS_MAX_SCALE_UP`：默认 `2.0`（最多放大 2×，防止滥用放大）
-- `THUMBS_MAX_DIMENSION`：默认 `8192`（绝对尺寸上限，防止超大内存消耗）
-- `THUMBS_SOURCE_PREFIXES`：默认 `{}`（空表示不启用源映射：thumb 会全部回退原图）
+- `FLORIST_THUMBS_ENABLED`：默认 `True`
+- `FLORIST_THUMBS_URL_PREFIX`：默认 `/thumbs`
+- `FLORIST_THUMBS_CACHE_DIR`：默认 `None`（走 `UPLOADED_PATH / FLORIST_THUMBS_CACHE_SUBDIR`）
+- `FLORIST_THUMBS_CACHE_SUBDIR`：默认 `_thumbs`
+- `FLORIST_THUMBS_ALLOWED_FORMATS`：默认 `('jpg','png','webp')`
+- `FLORIST_THUMBS_DEFAULT_QUALITY`：默认 `70`
+- `FLORIST_THUMBS_MAX_SCALE_UP`：默认 `2.0`（最多放大 2×，防止滥用放大）
+- `FLORIST_THUMBS_MAX_DIMENSION`：默认 `8192`（绝对尺寸上限，防止超大内存消耗）
+- `FLORIST_THUMBS_SOURCE_PREFIXES`：默认 `{}`（空表示不启用源映射：thumb 会全部回退原图）
 
 ---
 
@@ -209,10 +209,10 @@ Florist 在 `florist/settings.py` 里提供了默认配置：
 
 这套实现刻意做了“可控 + 安全”的取舍：
 
-1. **只处理白名单来源**：通过 `THUMBS_SOURCE_PREFIXES` 限制可处理 URL。
+1. **只处理白名单来源**：通过 `FLORIST_THUMBS_SOURCE_PREFIXES` 限制可处理 URL。
 2. **拒绝路径穿越**：URL 后缀中出现 `..` 直接拒绝。
-3. **尺寸与放大限制**：`THUMBS_MAX_DIMENSION` + `THUMBS_MAX_SCALE_UP`。
-4. **格式白名单**：只输出 `THUMBS_ALLOWED_FORMATS`。
+3. **尺寸与放大限制**：`FLORIST_THUMBS_MAX_DIMENSION` + `FLORIST_THUMBS_MAX_SCALE_UP`。
+4. **格式白名单**：只输出 `FLORIST_THUMBS_ALLOWED_FORMATS`。
 5. **JPEG 白底**：输出 jpg 时如有透明通道，会用白底合成，避免黑底/异常。
 6. **EXIF 方向修正**：`ImageOps.exif_transpose`，避免拍照图片旋转错误。
 7. **Fail-open**：任何解析/生成异常返回原 URL（或者你给的 `alt`），不影响页面。
@@ -235,8 +235,9 @@ thumb_url = ensure_thumb('/wx/avatars/avatar.png', 'w128h128cc-q70jpg')
 
 返回 `None` 的常见原因：
 
-- `THUMBS_ENABLED=False`
-- `THUMBS_SOURCE_PREFIXES` 未配置或不匹配
+- `FLORIST_THUMBS_ENABLED=False`
+- `FLORIST_THUMBS_ENABLED=False`
+- `FLORIST_THUMBS_SOURCE_PREFIXES` 未配置或不匹配
 - 源文件不存在
 - spec 非法
 - out_fmt 不在白名单
@@ -247,11 +248,11 @@ thumb_url = ensure_thumb('/wx/avatars/avatar.png', 'w128h128cc-q70jpg')
 
 当你发现页面仍在请求原图（说明 thumb 回退了）：
 
-- 确认 `THUMBS_SOURCE_PREFIXES` 是否覆盖该 URL 前缀
+- 确认 `FLORIST_THUMBS_SOURCE_PREFIXES` 是否覆盖该 URL 前缀
 - 确认 `UPLOADED_PATH` 与映射子目录真实存在并包含文件
-- 确认输出格式在 `THUMBS_ALLOWED_FORMATS` 内（比如 `avif` 默认会被拒绝）
+- 确认输出格式在 `FLORIST_THUMBS_ALLOWED_FORMATS` 内（比如 `avif` 默认会被拒绝）
 - 检查 spec 是否写错（例如 `s500cc` 会被拒绝；`s` 不允许 mode）
-- 若是“路由 404”：确认 `_thumbs`（或 `THUMBS_CACHE_DIR`）内已经生成文件；以及 blueprint 是否注册
+- 若是“路由 404”：确认 `_thumbs`（或 `FLORIST_THUMBS_CACHE_DIR`）内已经生成文件；以及 blueprint 是否注册
 
 ---
 

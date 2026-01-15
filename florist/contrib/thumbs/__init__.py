@@ -7,12 +7,12 @@ from .blueprint import thumbs_bp
 
 
 def init(app: Flask) -> None:
-    if not app.config.get("THUMBS_ENABLED", True):
+    if not app.config.get("FLORIST_THUMBS_ENABLED", True):
         return
 
     register_thumb_filter(app)
 
     # Provide a simple Flask route for serving generated thumbs.
-    # In production you can serve THUMBS_CACHE_DIR via nginx/CDN.
-    url_prefix = app.config.get("THUMBS_URL_PREFIX", "/thumbs")
+    # In production you can serve FLORIST_THUMBS_CACHE_DIR via nginx/CDN.
+    url_prefix = app.config.get("FLORIST_THUMBS_URL_PREFIX", "/thumbs")
     app.register_blueprint(thumbs_bp, url_prefix=url_prefix)
