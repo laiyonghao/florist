@@ -13,7 +13,7 @@ def init(app, *a, **kw):
     db_init(app)
     # CDN
     from flask_cdn import CDN
-    cdn = CDN(app)
+    CDN(app)
     # 初始化 API
     from flask_mongorest import MongoRest
     api = MongoRest(app, url_prefix='/api')
@@ -32,3 +32,12 @@ def init(app, *a, **kw):
     # 初始化管理后台
     from .admin import init as admin_init
     admin_init(app, *a, **kw)
+
+    # 初始化缩略图（Jinja filter + thumbs 静态路由）
+    try:
+        from .contrib.thumbs import init as thumbs_init
+
+        thumbs_init(app)
+    except Exception:
+        # Fail-open: thumbs is optional and must not break app startup.
+        app.logger.exception("init thumbs failed")
