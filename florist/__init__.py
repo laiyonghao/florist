@@ -11,9 +11,6 @@ def init(app, *a, **kw):
     # 初始化数据库
     from .db import init as db_init
     db_init(app)
-    # CDN
-    from flask_cdn import CDN
-    CDN(app)
     # 初始化 API
     from flask_mongorest import MongoRest
     api = MongoRest(app, url_prefix='/api')
