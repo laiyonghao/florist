@@ -7,6 +7,15 @@ def init(app, *a, **kw):
     global cache, limiter, api
     # 初始化缓存
     from flask_caching import Cache
+
+    # Redis 连接只认 FLORIST_REDIS_URL。
+    redis_url = app.config.get('FLORIST_REDIS_URL', 'redis://localhost:6379/0')
+
+    # 提供统一的 app.redis_client，供业务/后台/工具复用。
+    if not hasattr(app, 'redis_client'):
+        import redis
+
+        app.redis_client = redis.Redis.from_url(redis_url)
     cache = Cache(app)
     # 初始化数据库
     from .db import init as db_init
@@ -21,7 +30,7 @@ def init(app, *a, **kw):
         get_remote_address,
         app=app,
         strategy="fixed-window-elastic-expiry",
-        storage_uri="redis://localhost:6379",
+        storage_uri=redis_url,
     )
     # 初始化用户
     from .user import init as user_init

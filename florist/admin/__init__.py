@@ -32,8 +32,10 @@ def init(app, url=None, name=None, index_view=None):
 
     if app.config.get('FLORIST_REDISCLI_ENBLED'):
         from flask_admin.contrib import rediscli
-        from redis import Redis
-        admin.add_view(rediscli.RedisCli(Redis(), category='系统'))
+
+        # Flask-Admin 的 RedisCli 不读取 Flask 配置；它只接受一个 Redis 连接对象。
+        # redis_client 由 florist.init() 统一创建。
+        admin.add_view(rediscli.RedisCli(app.redis_client, category='系统'))
 
     app.register_blueprint(florist_bp, url_prefix=f'{admin.url}/florist')
 

@@ -1,3 +1,5 @@
+import os
+
 from flask_security import (
     uia_phone_mapper,
     uia_email_mapper,
@@ -42,7 +44,19 @@ FLORIST_ADMIN_URL = '/admin'
 FLORIST_ADMIN_SITE_NAME = 'Florist Admin'
 FLORIST_ADMIN_PACKAGES = ()
 FLORIST_REDISCLI_ENBLED = False
+
+# Florist 统一使用的 Redis 连接（包含 db 选择）。
+# 应用侧（例如 xhh）可以覆盖该值；也可以另外单独覆盖 CACHE_REDIS_URL。
+FLORIST_REDIS_URL = os.getenv('FLORIST_REDIS_URL', 'redis://localhost:6379/0')
 # ------ Florist ------
+
+# ------ Flask-Caching (Florist defaults) ------
+# Florist 的默认缓存配置放在 settings 里；应用侧可通过覆盖这些配置自定义。
+CACHE_TYPE = 'RedisCache'
+CACHE_REDIS_URL = FLORIST_REDIS_URL
+CACHE_DEFAULT_TIMEOUT = 300
+CACHE_KEY_PREFIX = 'florist:'
+# ------ Flask-Caching (Florist defaults) ------
 
 # ------ Florist Thumbs (Jinja filter: thumb) ------
 # Enable/disable thumbs feature globally.
