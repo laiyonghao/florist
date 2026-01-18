@@ -6,6 +6,7 @@
 
 - 文档索引：`doc/doc.md`
 - 缩略图（Thumbs）：`doc/thumbs.md`
+- Admin（Flask-Admin）：`doc/admin.md`
 
 ## 目标
 
@@ -39,6 +40,21 @@
 7. page: 低代码页面开发
 8. config: 配置
 9. thumbs: 缩略图（按需生成 + 落盘缓存，Jinja filter）
+
+## Admin（Flask-Admin）小特性
+
+### 当前视图标题（category / name）
+
+当后台菜单使用 `category` 分组时，为了更清晰地提示“当前正在看的 ModelView”，Florist 可以在后台内容区顶部显示：
+
+- `category / name`（即 `{{ admin_view.category }} / {{ admin_view.name }}`）
+
+开关配置（默认开启）：
+
+- `FLORIST_ADMIN_SHOW_VIEW_TITLE = True`（默认）
+- `FLORIST_ADMIN_SHOW_VIEW_TITLE = False`（关闭）
+
+更多说明见：`doc/admin.md`。
 
 ## 状态
 

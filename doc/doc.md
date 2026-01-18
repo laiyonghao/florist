@@ -12,3 +12,7 @@ Florist 文档索引（持续补充）。
 - [支付（pay）](pay.md)
 - [电商基础（shop）](shop.md)
 - [deprecated-admin（已弃用示例）](deprecated-admin.md)
+
+## Admin
+
+- [Admin（Flask-Admin）](admin.md)

@@ -5,6 +5,8 @@ from flask_admin import Admin
 from .views import AdminIndexView, ModelView # noqa
 from .form.fields import ImageInputWidgetExtraJs  # noqa
 
+from jinja2 import ChoiceLoader, PackageLoader
+
 admin = None
 
 static_folder = pathlib.Path(__file__).parent / 'static'
@@ -17,6 +19,22 @@ def image_input_widget_js():
 
 
 def init(app, url=None, name=None, index_view=None):
+    # Allow florist to override Flask-Admin templates globally.
+    # Example: show `category / view name` header via
+    # templates/admin/base.html.
+    try:
+        florist_loader = PackageLoader('florist.admin', 'templates')
+        existing = app.jinja_loader
+        if isinstance(existing, ChoiceLoader):
+            if florist_loader not in existing.loaders:
+                app.jinja_loader = ChoiceLoader(
+                    [florist_loader, *existing.loaders]
+                )
+        else:
+            app.jinja_loader = ChoiceLoader([florist_loader, existing])
+    except Exception:
+        pass
+
     if not url:
         url = app.config['FLORIST_ADMIN_URL']
     if not name:
